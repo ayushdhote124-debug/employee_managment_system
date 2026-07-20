@@ -1,0 +1,14 @@
+{
+  "name": "employee-attendance-management-system",
+  "version": "1.0.0",
+  "description": "Employee Attendance Management System using MERN stack",
+  "scripts": {
+    "install-all": "npm install && npm install --prefix client && npm install --prefix server",
+    "client": "npm run dev --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently \"npm run client\" \"npm run server\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
