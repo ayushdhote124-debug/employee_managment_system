@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { ChevronsLeft, Menu, Fingerprint } from 'lucide-react';
+import { ChevronsLeft, Menu, Fingerprint, Moon, Sun } from 'lucide-react';
 
 export default function Navbar({ toggleSidebar, isSidebarOpen }) {
   const { user } = useSelector((state) => state.auth);
+  
+  // Initialize dark mode state based on body class or localStorage
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  const toggleTheme = () => {
+    if (isDarkMode) {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+      setIsDarkMode(false);
+    } else {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+      setIsDarkMode(true);
+    }
+  };
 
   return (
     <nav className="top-navbar">
@@ -37,6 +54,10 @@ export default function Navbar({ toggleSidebar, isSidebarOpen }) {
         </div>
         
         <div className="navbar-right">
+          <button className="toggle-btn" onClick={toggleTheme} style={{ marginRight: '1rem' }} title="Toggle Dark Mode">
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          
           {user ? (
             <>
               <div className="navbar-user-info">

@@ -4,6 +4,8 @@ import { generateToken } from '../utils/generateToken.js';
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
+
+
 export const registerUser = async (req, res, next) => {
   const { name, email, password, role, department } = req.body;
 

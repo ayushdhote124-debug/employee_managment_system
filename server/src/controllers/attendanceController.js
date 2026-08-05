@@ -3,6 +3,9 @@ import Attendance from '../models/Attendance.js';
 // @desc    Get all employees' attendance
 // @route   GET /api/attendance/all
 // @access  Private (Admin/Manager)
+
+
+
 export const getAllAttendance = async (req, res) => {
   try {
     const attendanceRecords = await Attendance.find({})
