@@ -7,7 +7,7 @@
     "client": "npm run dev --prefix client",
     "server": "npm run dev --prefix server",
     "dev": "concurrently \"npm run client\" \"npm run server\"",
-    "build": "cd client && npm install && npm run build"
+    "build": "node -e \"const fs=require('fs'),{execSync}=require('child_process');if(fs.existsSync('client')){execSync('npm run build',{cwd:'client',stdio:'inherit'})}else{execSync('npm run build',{stdio:'inherit'})}\""
   },
   "dependencies": {
     "concurrently": "^8.2.2"
