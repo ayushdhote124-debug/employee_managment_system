@@ -7,9 +7,17 @@ import { generateToken } from '../utils/generateToken.js';
 
 
 export const registerUser = async (req, res, next) => {
-  const { name, email, password, role, department } = req.body;
+  const { name, email, password, department } = req.body;
 
   try {
+    const userCount = await User.countDocuments({});
+    
+    // Only allow public registration if no users exist (initial setup)
+    if (userCount > 0) {
+      res.status(403);
+      return next(new Error('Public registration is disabled. Please contact your Administrator to create an account.'));
+    }
+
     const userExists = await User.findOne({ email });
 
     if (userExists) {
@@ -21,7 +29,7 @@ export const registerUser = async (req, res, next) => {
       name,
       email,
       password,
-      role,
+      role: 'admin', // Force first user to be admin
       department,
     });
 
