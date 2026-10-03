@@ -12,6 +12,7 @@ import ManagerApprovalsPage from './manager/ManagerApprovalsPage';
 import ReportsPage from './ReportsPage';
 import ProfilePage from './ProfilePage';
 import UsersPage from './UsersPage';
+import UserManagement from './admin/UserManagement';
 import AttendanceOverviewPage from './AttendanceOverviewPage';
 
 import UserProfilePage from './UserProfilePage';
@@ -59,7 +60,7 @@ export default function DashboardPage() {
         return (
           <Routes>
             <Route path="/" element={<AdminDashboard />} />
-            <Route path="users" element={<UsersPage />} />
+            <Route path="users" element={<UserManagement />} />
             <Route path="users/:id" element={<UserProfilePage />} />
             <Route path="attendance-overview" element={<AttendanceOverviewPage />} />
             <Route path="leave-management" element={<ManagerApprovalsPage />} />
