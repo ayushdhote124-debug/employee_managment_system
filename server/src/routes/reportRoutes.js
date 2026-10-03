@@ -1,6 +1,10 @@
 import express from 'express';
 import { protect } from '../middlewares/authMiddleware.js';
-import { getAttendanceReport } from '../controllers/reportController.js';
+import { 
+  getAttendanceReport, 
+  downloadAttendanceReportPDF, 
+  downloadAttendanceReportExcel 
+} from '../controllers/reportController.js';
 
 const router = express.Router();
 
@@ -10,5 +14,7 @@ const router = express.Router();
  * @access  Private (Employee fetches own, Admin/Manager fetches all)
  */
 router.get('/attendance', protect, getAttendanceReport);
+router.get('/attendance/download/pdf', protect, downloadAttendanceReportPDF);
+router.get('/attendance/download/excel', protect, downloadAttendanceReportExcel);
 
 export default router;

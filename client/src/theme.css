@@ -1,125 +1,184 @@
+/* ---------------------------------
+   DARK THEME SPECIFIC OVERRIDES
+----------------------------------- */
 body.dark-theme {
   --bg-app: #0f172a;
   --bg-card: #1e293b;
   --bg-card-hover: #334155;
   --text-main: #f8fafc;
-  --text-muted: #cbd5e1;
+  --text-muted: #94a3b8;
   --text-inverse: #0f172a;
   --border-color: #334155;
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  background-color: #0f172a;
+  color: #f8fafc;
 }
 
 body.dark-theme .top-navbar {
-  background-color: #1e293b;
-  border-bottom: 1px solid #334155;
+  background-color: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
   box-shadow: none;
 }
 
 body.dark-theme .sidebar {
-  background-color: #1e293b;
-  border-right: 1px solid #334155;
+  background-color: #1e293b !important;
+  border-right: 1px solid #334155 !important;
 }
 
 body.dark-theme .dashboard-main, 
-body.dark-theme .app-container {
-  background-color: #0f172a;
+body.dark-theme .app-container,
+body.dark-theme .app-wrapper {
+  background-color: #0f172a !important;
 }
 
+/* All Cards & Widgets in Dark Mode */
 body.dark-theme .widget,
 body.dark-theme .stat-card-modern,
 body.dark-theme .dashboard-welcome-card,
 body.dark-theme .auth-card-clean,
-body.dark-theme .profile-card-modern {
-  background-color: #1e293b;
-  color: #f8fafc;
-  border: 1px solid #334155;
+body.dark-theme .profile-card-modern,
+body.dark-theme .data-table-wrapper,
+body.dark-theme .punch-card-container,
+body.dark-theme .camera-capture-container,
+body.dark-theme .location-picker-container {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
 }
 
-body.dark-theme .toggle-btn {
-  background-color: #334155;
+/* Headings and text elements */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+  color: #f8fafc !important;
+}
+
+body.dark-theme p,
+body.dark-theme span:not(.badge),
+body.dark-theme label {
   color: #cbd5e1;
 }
 
-body.dark-theme .toggle-btn:hover {
-  background-color: #3b82f6;
-  color: #fff;
+body.dark-theme .stat-info h4 {
+  color: #94a3b8 !important;
 }
 
-body.dark-theme .brand-text h1,
-body.dark-theme .welcome-content h2,
-body.dark-theme .stat-info p,
-body.dark-theme .auth-title,
-body.dark-theme .navbar-greeting strong {
-  color: #f8fafc;
+body.dark-theme .stat-info p {
+  color: #f8fafc !important;
 }
 
-body.dark-theme .brand-text p,
-body.dark-theme .welcome-subtitle,
-body.dark-theme .stat-info h4,
-body.dark-theme .navbar-greeting,
-body.dark-theme .navbar-role {
-  color: #94a3b8;
+/* Tables in Dark Mode */
+body.dark-theme table {
+  background-color: transparent !important;
 }
 
+body.dark-theme thead tr {
+  background-color: #1e293b !important;
+  border-bottom: 2px solid #334155 !important;
+}
+
+body.dark-theme th {
+  color: #94a3b8 !important;
+  background-color: #1e293b !important;
+}
+
+body.dark-theme td {
+  color: #f8fafc !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+body.dark-theme tr {
+  border-bottom-color: #334155 !important;
+}
+
+body.dark-theme tr:hover {
+  background-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+/* Inputs & Form controls in Dark Mode */
 body.dark-theme .form-group-clean input,
 body.dark-theme .form-group-clean select,
 body.dark-theme .form-group-clean textarea,
-body.dark-theme .input-field {
-  background-color: #0f172a;
-  border-color: #475569;
-  color: #f8fafc;
+body.dark-theme .input-field,
+body.dark-theme input[type="text"],
+body.dark-theme input[type="date"],
+body.dark-theme input[type="email"],
+body.dark-theme input[type="password"],
+body.dark-theme select,
+body.dark-theme textarea {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
 }
 
 body.dark-theme .form-group-clean input:focus,
 body.dark-theme .form-group-clean select:focus,
 body.dark-theme .form-group-clean textarea:focus,
 body.dark-theme .input-field:focus {
-  border-color: #3b82f6;
-  background-color: #1e293b;
+  border-color: #3b82f6 !important;
+  background-color: #1e293b !important;
+}
+
+body.dark-theme .toggle-btn {
+  background-color: #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .toggle-btn:hover {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+}
+
+body.dark-theme .brand-text h1,
+body.dark-theme .welcome-content h2,
+body.dark-theme .auth-title,
+body.dark-theme .navbar-greeting strong {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .brand-text p,
+body.dark-theme .welcome-subtitle,
+body.dark-theme .navbar-greeting,
+body.dark-theme .navbar-role {
+  color: #94a3b8 !important;
 }
 
 body.dark-theme .sidebar-nav li a {
-  color: #cbd5e1;
+  color: #cbd5e1 !important;
 }
 
 body.dark-theme .sidebar-nav li a:hover,
 body.dark-theme .sidebar-nav li a.active-link {
-  background-color: #334155;
-  color: #3b82f6;
-  border-left-color: #3b82f6;
+  background-color: #334155 !important;
+  color: #3b82f6 !important;
+  border-left-color: #3b82f6 !important;
 }
 
 body.dark-theme .quick-action-btn {
-  background-color: #334155;
-  border-color: #475569;
-  color: #f8fafc;
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
 }
 
 body.dark-theme .quick-action-btn:hover {
-  background-color: #1e293b;
-  border-color: #3b82f6;
-  color: #3b82f6;
-}
-
-body.dark-theme .status-table th,
-body.dark-theme .status-table td {
-  border-bottom-color: #334155;
-  color: #e2e8f0;
-}
-
-body.dark-theme .status-table th {
-  color: #94a3b8;
+  background-color: #1e293b !important;
+  border-color: #3b82f6 !important;
+  color: #3b82f6 !important;
 }
 
 body.dark-theme .btn-secondary-outline {
-  background: transparent;
-  color: #cbd5e1;
-  border-color: #475569;
+  background: transparent !important;
+  color: #cbd5e1 !important;
+  border-color: #475569 !important;
 }
+
 body.dark-theme .btn-secondary-outline:hover {
-  background: #334155;
-  color: #f8fafc;
-  border-color: #94a3b8;
+  background: #334155 !important;
+  color: #f8fafc !important;
+  border-color: #94a3b8 !important;
 }

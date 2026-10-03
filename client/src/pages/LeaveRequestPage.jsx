@@ -1,3 +1,12 @@
+/**
+ * File Name: LeaveRequestPage.jsx
+ * File Path: client/src/pages/LeaveRequestPage.jsx
+ * 
+ * Component Description:
+ * Leave Application Page for employees. Features form inputs for Leave Type, Start/End dates,
+ * reason text area, and past leave history table with full dark/light theme compatibility.
+ */
+
 import React, { useState } from 'react';
 import { useApplyLeaveMutation, useGetMyLeavesQuery } from '../features/leave/leaveApi';
 
@@ -30,13 +39,17 @@ export default function LeaveRequestPage() {
 
   return (
     <div className="leave-page">
-      <div className="widget" style={{ maxWidth: '600px', marginBottom: '2rem' }}>
+      <div className="widget" style={{ maxWidth: '650px', marginBottom: '2rem' }}>
         <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Apply for Leave</h3>
-        {message && <div style={{ padding: '1rem', marginBottom: '1rem', background: '#dcfce7', color: '#166534', borderRadius: '8px' }}>{message}</div>}
+        {message && (
+          <div style={{ padding: '1rem', marginBottom: '1rem', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', borderRadius: '8px', fontWeight: 600 }}>
+            {message}
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div className="form-group-clean">
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Leave Type</label>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: 'var(--text-muted)' }}>Leave Type</label>
             <select name="leaveType" value={leaveData.leaveType} onChange={handleChange} required>
               <option value="Sick Leave">Sick Leave</option>
               <option value="Casual Leave">Casual Leave</option>
@@ -45,19 +58,19 @@ export default function LeaveRequestPage() {
             </select>
           </div>
           
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <div className="form-group-clean" style={{ flex: 1 }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Start Date</label>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div className="form-group-clean" style={{ flex: '1 1 200px' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: 'var(--text-muted)' }}>Start Date</label>
               <input type="date" name="startDate" value={leaveData.startDate} onChange={handleChange} required />
             </div>
-            <div className="form-group-clean" style={{ flex: 1 }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>End Date</label>
+            <div className="form-group-clean" style={{ flex: '1 1 200px' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: 'var(--text-muted)' }}>End Date</label>
               <input type="date" name="endDate" value={leaveData.endDate} onChange={handleChange} required />
             </div>
           </div>
 
           <div className="form-group-clean">
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Reason</label>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: 'var(--text-muted)' }}>Reason</label>
             <textarea name="reason" value={leaveData.reason} onChange={handleChange} required rows="3" placeholder="Briefly describe the reason..."></textarea>
           </div>
 
@@ -69,31 +82,31 @@ export default function LeaveRequestPage() {
 
       <div className="widget">
         <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>My Leave History</h3>
-        {isFetching ? <p>Loading...</p> : (
+        {isFetching ? <p style={{ color: 'var(--text-muted)' }}>Loading...</p> : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ borderBottom: '2px solid #e2e8f0', color: 'var(--text-muted)' }}>
-                  <th style={{ padding: '1rem' }}>Type</th>
-                  <th style={{ padding: '1rem' }}>From</th>
-                  <th style={{ padding: '1rem' }}>To</th>
-                  <th style={{ padding: '1rem' }}>Status</th>
+                <tr style={{ borderBottom: '2px solid var(--border-color)', color: 'var(--text-muted)' }}>
+                  <th style={{ padding: '1rem', color: 'var(--text-muted)' }}>Type</th>
+                  <th style={{ padding: '1rem', color: 'var(--text-muted)' }}>From</th>
+                  <th style={{ padding: '1rem', color: 'var(--text-muted)' }}>To</th>
+                  <th style={{ padding: '1rem', color: 'var(--text-muted)' }}>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {leavesData?.leaves?.map((leave) => (
-                  <tr key={leave._id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '1rem' }}>{leave.leaveType}</td>
-                    <td style={{ padding: '1rem' }}>{new Date(leave.startDate).toLocaleDateString()}</td>
-                    <td style={{ padding: '1rem' }}>{new Date(leave.endDate).toLocaleDateString()}</td>
+                  <tr key={leave._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                    <td style={{ padding: '1rem', color: 'var(--text-main)' }}>{leave.leaveType}</td>
+                    <td style={{ padding: '1rem', color: 'var(--text-main)' }}>{new Date(leave.startDate).toLocaleDateString()}</td>
+                    <td style={{ padding: '1rem', color: 'var(--text-main)' }}>{new Date(leave.endDate).toLocaleDateString()}</td>
                     <td style={{ padding: '1rem' }}>
                       <span style={{ 
                         padding: '0.25rem 0.75rem', 
                         borderRadius: '12px', 
                         fontSize: '0.85rem',
                         fontWeight: '600',
-                        background: leave.status === 'Approved' ? '#dcfce7' : (leave.status === 'Rejected' ? '#fee2e2' : '#fef3c7'),
-                        color: leave.status === 'Approved' ? '#166534' : (leave.status === 'Rejected' ? '#991b1b' : '#b45309')
+                        background: leave.status === 'Approved' ? 'rgba(16, 185, 129, 0.15)' : (leave.status === 'Rejected' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)'),
+                        color: leave.status === 'Approved' ? '#10b981' : (leave.status === 'Rejected' ? '#ef4444' : '#f59e0b')
                       }}>
                         {leave.status}
                       </span>

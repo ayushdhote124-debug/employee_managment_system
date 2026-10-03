@@ -1,3 +1,13 @@
+/**
+ * File Name: AdminDashboard.jsx
+ * File Path: client/src/components/dashboard/AdminDashboard.jsx
+ * 
+ * Component Description:
+ * Modern responsive Admin Portal Dashboard. Displays organization summary KPIs,
+ * user role breakdown, pending leave and overtime approvals, interactive analytics charts,
+ * and quick administrative user creation modal triggers. Fully supports light and dark themes.
+ */
+
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -36,55 +46,23 @@ export default function AdminDashboard() {
   const [updateLeaveStatus] = useUpdateLeaveStatusMutation();
   const [updateOvertimeStatus] = useUpdateOvertimeStatusMutation();
 
-  if (isStatsLoading || isLeavesLoading || isOvertimeLoading) return <div>Loading admin dashboard...</div>;
-  if (statsError) return <div className="error-banner">Failed to load dashboard statistics.</div>;
+  if (isStatsLoading || isLeavesLoading || isOvertimeLoading) {
+    return <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading admin dashboard...</div>;
+  }
+  if (statsError) {
+    return <div className="error-banner">Failed to load dashboard statistics.</div>;
+  }
 
   const pendingLeavesList = pendingLeavesData?.leaves?.slice(0, 5) || [];
   const pendingOvertimeList = pendingOvertimeData?.overtime?.slice(0, 5) || [];
 
-  // --- MOCK DATA FOR UI DEMONSTRATION (Until API is updated) ---
-  
-  // 1. Attendance Status Chart Data (Bar)
-  const attendanceChartData = [
-    { name: 'Mon', present: 42, absent: 3, late: 5 },
-    { name: 'Tue', present: 45, absent: 2, late: 3 },
-    { name: 'Wed', present: 40, absent: 5, late: 5 },
-    { name: 'Thu', present: 48, absent: 1, late: 1 },
-    { name: 'Fri', present: 46, absent: 2, late: 2 },
-  ];
-
-  // 2. Working Hours Data (Line)
-  const workingHoursData = [
-    { name: 'Week 1', hours: 1850 },
-    { name: 'Week 2', hours: 1920 },
-    { name: 'Week 3', hours: 1890 },
-    { name: 'Week 4', hours: 1950 },
-  ];
-
-  // 3. Department Wise Employees (Pie)
-  const deptData = [
-    { name: 'Engineering', value: 25 },
-    { name: 'Marketing', value: 10 },
-    { name: 'HR', value: 5 },
-    { name: 'Sales', value: 10 },
-  ];
   const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b'];
-
-  // 4. Overtime Data (Bar)
-  const overtimeData = [
-    { name: 'Mon', hours: 12 },
-    { name: 'Tue', hours: 8 },
-    { name: 'Wed', hours: 15 },
-    { name: 'Thu', hours: 5 },
-    { name: 'Fri', hours: 20 },
-  ];
-
-  // Mock Tables
-  const recentAttendance = [
-    { id: 1, name: 'Rahul Sharma', time: '09:00 AM', status: 'On Time' },
-    { id: 2, name: 'Priya Patel', time: '09:15 AM', status: 'Late' },
-    { id: 3, name: 'Amit Kumar', time: '08:55 AM', status: 'On Time' },
-  ];
+  
+  const attendanceChartData = stats?.attendanceChartData || [];
+  const workingHoursData = stats?.workingHoursData || [];
+  const deptData = stats?.deptData || [];
+  const overtimeData = stats?.overtimeData || [];
+  const recentAttendance = stats?.recentAttendance || [];
 
   return (
     <div style={{ paddingBottom: '2rem' }}>
@@ -98,60 +76,60 @@ export default function AdminDashboard() {
         
         <div className="stat-card-modern">
           <div className="stat-info">
-            <h4 style={{ color: '#64748b', fontSize: '0.9rem' }}>Total Employees</h4>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats?.totalUsers || 42}</p>
+            <h4 style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Total Employees</h4>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats?.totalUsers || 42}</p>
           </div>
-          <div className="stat-icon" style={{ color: '#3b82f6', background: '#eff6ff' }}>
+          <div className="stat-icon" style={{ color: '#3b82f6', background: 'rgba(59, 130, 246, 0.12)' }}>
             <Users size={24} />
           </div>
         </div>
 
         <div className="stat-card-modern">
           <div className="stat-info">
-            <h4 style={{ color: '#64748b', fontSize: '0.9rem' }}>Total Managers</h4>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>8</p>
+            <h4 style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Total Managers</h4>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats?.totalManagers || 0}</p>
           </div>
-          <div className="stat-icon" style={{ color: '#8b5cf6', background: '#f5f3ff' }}>
+          <div className="stat-icon" style={{ color: '#8b5cf6', background: 'rgba(139, 92, 246, 0.12)' }}>
             <UserCheck size={24} />
           </div>
         </div>
 
         <div className="stat-card-modern">
           <div className="stat-info">
-            <h4 style={{ color: '#64748b', fontSize: '0.9rem' }}>Today's Attendance</h4>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>38/50</p>
+            <h4 style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Today's Attendance</h4>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats?.todaysAttendance || 0}/{stats?.activeEmployees || 0}</p>
           </div>
-          <div className="stat-icon" style={{ color: '#10b981', background: '#ecfdf5' }}>
+          <div className="stat-icon" style={{ color: '#10b981', background: 'rgba(16, 185, 129, 0.12)' }}>
             <CheckCircle size={24} />
           </div>
         </div>
 
         <div className="stat-card-modern">
           <div className="stat-info">
-            <h4 style={{ color: '#64748b', fontSize: '0.9rem' }}>Pending Overtime</h4>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>12</p>
+            <h4 style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Pending Overtime</h4>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats?.pendingOvertime || 0}</p>
           </div>
-          <div className="stat-icon" style={{ color: '#f59e0b', background: '#fffbeb' }}>
+          <div className="stat-icon" style={{ color: '#f59e0b', background: 'rgba(245, 158, 11, 0.12)' }}>
             <Clock size={24} />
           </div>
         </div>
 
         <div className="stat-card-modern">
           <div className="stat-info">
-            <h4 style={{ color: '#64748b', fontSize: '0.9rem' }}>Pending Leave</h4>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats?.pendingLeaves || 0}</p>
+            <h4 style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Pending Leave</h4>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats?.pendingLeaves || 0}</p>
           </div>
-          <div className="stat-icon" style={{ color: '#ef4444', background: '#fef2f2' }}>
+          <div className="stat-icon" style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.12)' }}>
             <FileText size={24} />
           </div>
         </div>
 
         <div className="stat-card-modern">
           <div className="stat-info">
-            <h4 style={{ color: '#64748b', fontSize: '0.9rem' }}>Total Working Hours</h4>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>320h</p>
+            <h4 style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Total Working Hours</h4>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats?.totalWorkingHours || 0}h</p>
           </div>
-          <div className="stat-icon" style={{ color: '#6366f1', background: '#eef2ff' }}>
+          <div className="stat-icon" style={{ color: '#6366f1', background: 'rgba(99, 102, 241, 0.12)' }}>
             <Calendar size={24} />
           </div>
         </div>
@@ -160,7 +138,7 @@ export default function AdminDashboard() {
 
       {/* 3. QUICK ACTIONS */}
       <div style={{ marginBottom: '2rem' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: '#1e293b' }}>Quick Actions</h3>
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-main)' }}>Quick Actions</h3>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <button 
             className="btn-action-base btn-primary-blue" 
@@ -183,19 +161,19 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* 4. CHARTS (4 Charts in 2x2 Grid) */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+      {/* 4. CHARTS */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
         
         {/* Chart 1: Attendance Status */}
         <div className="widget">
-          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: '#1e293b' }}>Attendance Status</h3>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Attendance Status</h3>
           <div style={{ height: 250 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={attendanceChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip cursor={{fill: '#f8fafc'}} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} stroke="var(--text-muted)" />
+                <YAxis axisLine={false} tickLine={false} stroke="var(--text-muted)" />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }} />
                 <Legend />
                 <Bar dataKey="present" fill="#10b981" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="absent" fill="#ef4444" radius={[4, 4, 0, 0]} />
@@ -207,14 +185,14 @@ export default function AdminDashboard() {
 
         {/* Chart 2: Working Hours */}
         <div className="widget">
-          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: '#1e293b' }}>Total Working Hours</h3>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Total Working Hours</h3>
           <div style={{ height: 250 }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={workingHoursData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} stroke="var(--text-muted)" />
+                <YAxis axisLine={false} tickLine={false} stroke="var(--text-muted)" />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }} />
                 <Line type="monotone" dataKey="hours" stroke="#3b82f6" strokeWidth={3} dot={{r: 4}} activeDot={{r: 6}} />
               </LineChart>
             </ResponsiveContainer>
@@ -223,7 +201,7 @@ export default function AdminDashboard() {
 
         {/* Chart 3: Department-wise Employees */}
         <div className="widget">
-          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: '#1e293b' }}>Department-wise Employees</h3>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Department-wise Employees</h3>
           <div style={{ height: 250 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -232,7 +210,7 @@ export default function AdminDashboard() {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -241,14 +219,14 @@ export default function AdminDashboard() {
 
         {/* Chart 4: Overtime Trends */}
         <div className="widget">
-          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: '#1e293b' }}>Overtime Trends (Hours)</h3>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Overtime Trends (Hours)</h3>
           <div style={{ height: 250 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={overtimeData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip cursor={{fill: '#f8fafc'}} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} stroke="var(--text-muted)" />
+                <YAxis axisLine={false} tickLine={false} stroke="var(--text-muted)" />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }} />
                 <Bar dataKey="hours" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -262,17 +240,24 @@ export default function AdminDashboard() {
         
         {/* Table 1: Recent Attendance */}
         <div className="widget">
-          <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: '#1e293b', display: 'flex', justifyContent: 'space-between' }}>
-            Recent Attendance <span style={{fontSize: '0.8rem', color: '#3b82f6', cursor: 'pointer'}}>View All</span>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: 'var(--text-main)', display: 'flex', justifyContent: 'space-between' }}>
+            Recent Attendance <span onClick={() => navigate('/dashboard/attendance-overview')} style={{fontSize: '0.8rem', color: '#3b82f6', cursor: 'pointer'}}>View All</span>
           </h3>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
               {recentAttendance.map(record => (
-                <tr key={record.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '0.75rem 0', fontWeight: 500 }}>{record.name}</td>
-                  <td style={{ padding: '0.75rem 0', color: '#64748b' }}>{record.time}</td>
+                <tr key={record.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '0.75rem 0', fontWeight: 500, color: 'var(--text-main)' }}>{record.name}</td>
+                  <td style={{ padding: '0.75rem 0', color: 'var(--text-muted)' }}>{record.time}</td>
                   <td style={{ padding: '0.75rem 0', textAlign: 'right' }}>
-                    <span className={`status-badge ${record.status === 'On Time' ? 'status-approved' : 'status-rejected'}`}>
+                    <span style={{ 
+                      padding: '0.2rem 0.5rem', 
+                      borderRadius: '999px', 
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      backgroundColor: record.status === 'On Time' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                      color: record.status === 'On Time' ? '#10b981' : '#ef4444'
+                    }}>
                       {record.status}
                     </span>
                   </td>
@@ -284,27 +269,27 @@ export default function AdminDashboard() {
 
         {/* Table 2: Recent Leaves */}
         <div className="widget">
-          <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: '#1e293b', display: 'flex', justifyContent: 'space-between' }}>
-            Recent Leave Requests <span style={{fontSize: '0.8rem', color: '#3b82f6', cursor: 'pointer'}}>View All</span>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: 'var(--text-main)', display: 'flex', justifyContent: 'space-between' }}>
+            Recent Leave Requests <span onClick={() => navigate('/dashboard/leave-management')} style={{fontSize: '0.8rem', color: '#3b82f6', cursor: 'pointer'}}>View All</span>
           </h3>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
               {pendingLeavesList.length === 0 ? (
                 <tr>
-                  <td colSpan="3" style={{ padding: '0.75rem 0', textAlign: 'center', color: '#64748b' }}>No pending leave requests.</td>
+                  <td colSpan="3" style={{ padding: '0.75rem 0', textAlign: 'center', color: 'var(--text-muted)' }}>No pending leave requests.</td>
                 </tr>
               ) : pendingLeavesList.map(record => (
-                <tr key={record._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '0.75rem 0', fontWeight: 500 }}>{record.employee?.name || 'Unknown'}</td>
-                  <td style={{ padding: '0.75rem 0', color: '#64748b' }}>{record.leaveType}</td>
+                <tr key={record._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '0.75rem 0', fontWeight: 500, color: 'var(--text-main)' }}>{record.employee?.name || 'Unknown'}</td>
+                  <td style={{ padding: '0.75rem 0', color: 'var(--text-muted)' }}>{record.leaveType}</td>
                   <td style={{ padding: '0.75rem 0', textAlign: 'right' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                       <button 
                         onClick={() => updateLeaveStatus({ id: record._id, status: 'Approved' })}
-                        style={{ padding: '0.2rem 0.4rem', background: '#dcfce7', color: '#166534', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>Approve</button>
+                        style={{ padding: '0.2rem 0.4rem', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>Approve</button>
                       <button 
                         onClick={() => updateLeaveStatus({ id: record._id, status: 'Rejected' })}
-                        style={{ padding: '0.2rem 0.4rem', background: '#fee2e2', color: '#991b1b', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>Reject</button>
+                        style={{ padding: '0.2rem 0.4rem', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>Reject</button>
                     </div>
                   </td>
                 </tr>
@@ -315,27 +300,27 @@ export default function AdminDashboard() {
 
         {/* Table 3: Recent Overtime */}
         <div className="widget">
-          <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: '#1e293b', display: 'flex', justifyContent: 'space-between' }}>
-            Recent Overtime <span style={{fontSize: '0.8rem', color: '#3b82f6', cursor: 'pointer'}}>View All</span>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: 'var(--text-main)', display: 'flex', justifyContent: 'space-between' }}>
+            Recent Overtime <span onClick={() => navigate('/dashboard/overtime-management')} style={{fontSize: '0.8rem', color: '#3b82f6', cursor: 'pointer'}}>View All</span>
           </h3>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
               {pendingOvertimeList.length === 0 ? (
                 <tr>
-                  <td colSpan="3" style={{ padding: '0.75rem 0', textAlign: 'center', color: '#64748b' }}>No pending overtime requests.</td>
+                  <td colSpan="3" style={{ padding: '0.75rem 0', textAlign: 'center', color: 'var(--text-muted)' }}>No pending overtime requests.</td>
                 </tr>
               ) : pendingOvertimeList.map(record => (
-                <tr key={record._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '0.75rem 0', fontWeight: 500 }}>{record.employee?.name || 'Unknown'}</td>
-                  <td style={{ padding: '0.75rem 0', color: '#64748b' }}>{record.hours}h</td>
+                <tr key={record._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '0.75rem 0', fontWeight: 500, color: 'var(--text-main)' }}>{record.employee?.name || 'Unknown'}</td>
+                  <td style={{ padding: '0.75rem 0', color: 'var(--text-muted)' }}>{record.hours}h</td>
                   <td style={{ padding: '0.75rem 0', textAlign: 'right' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                       <button 
                         onClick={() => updateOvertimeStatus({ id: record._id, status: 'Approved' })}
-                        style={{ padding: '0.2rem 0.4rem', background: '#dcfce7', color: '#166534', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>Approve</button>
+                        style={{ padding: '0.2rem 0.4rem', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>Approve</button>
                       <button 
                         onClick={() => updateOvertimeStatus({ id: record._id, status: 'Rejected' })}
-                        style={{ padding: '0.2rem 0.4rem', background: '#fee2e2', color: '#991b1b', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>Reject</button>
+                        style={{ padding: '0.2rem 0.4rem', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>Reject</button>
                     </div>
                   </td>
                 </tr>
